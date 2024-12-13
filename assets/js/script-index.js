@@ -24,11 +24,14 @@ const getProducts = async () => {
       main.innerHTML += `<div class="card m-2" style="width: 18rem;">
                             <img src="${product.imageUrl}" class="card-img-top" alt="${product.brand} ${product.name}">
                             <div class="card-body  d-flex flex-column justify-content-between">
-                                <h5 class="card-title">${product.brand} ${product.name}</h5>
-                                <p class="card-text">${product.description}</p>
+                                <h3 class="card-title fw-bolder">${product.brand} ${product.name}</h3>
+                                <p class="card-text">${product.description} </p>
+                                
+                                <div><h4 class="text-center bg-secondary text-white border border-5 p-2">€${product.price}</h4>
                                 <div  class="d-flex flex-column">
                                 <a href="details.html?_id=${product._id}" class="btn btn-primary mb-2">Dettagli</a>
-                                <a href="#" class="btn btn-danger">Modifica</a>
+                                <a href="back-office.html?_id=${product._id}" class="btn btn-warning">Modifica</a>
+                            </div>
                             </div>
                             </div>
                         </div>`;

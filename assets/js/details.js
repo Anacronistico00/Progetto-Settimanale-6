@@ -29,4 +29,40 @@ const getProduct = function () {
     });
 };
 
-const productDetails = function (details) {};
+const productDetails = function (details) {
+  const mainDiv = document.getElementById('main');
+
+  const img = document.createElement('img');
+  img.src = `${details.imageUrl}`;
+  img.classList.add('col-3');
+
+  const descriptionDiv = document.createElement('div');
+  descriptionDiv.classList.add('container', 'col-9');
+
+  const descriptionH5 = document.createElement('h5');
+  descriptionH5.textContent = `${details.brand}`;
+
+  const descriptionH2 = document.createElement('h2');
+  descriptionH2.textContent = `${details.name}`;
+
+  const descriptionPrice = document.createElement('span');
+  descriptionPrice.textContent = `€${details.price}`;
+  descriptionPrice.classList.add(
+    'bg-black',
+    'text-warning',
+    'px-3',
+    'py-1',
+    'rounded-4'
+  );
+
+  const descriptionDetails = document.createElement('p');
+  descriptionDetails.textContent = `${details.description}`;
+  descriptionDetails.classList.add('mt-2');
+
+  descriptionDiv.appendChild(descriptionH5);
+  descriptionDiv.appendChild(descriptionH2);
+  descriptionDiv.appendChild(descriptionPrice);
+  descriptionDiv.appendChild(descriptionDetails);
+  mainDiv.appendChild(img);
+  mainDiv.appendChild(descriptionDiv);
+};

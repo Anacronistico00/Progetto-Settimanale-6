@@ -6,6 +6,23 @@ window.onload = function () {
   getProduct();
 };
 
+const showError = (message) => {
+  const alertContainer = document.getElementById('alert-container');
+
+  const errorAlert = document.createElement('div');
+  errorAlert.classList.add(
+    'alert',
+    'alert-danger',
+    'alert-dismissible',
+    'fade',
+    'show'
+  );
+  errorAlert.role = 'alert';
+  errorAlert.innerHTML = `${message} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
+
+  alertContainer.appendChild(errorAlert);
+};
+
 const getProduct = function () {
   const productID = new URLSearchParams(window.location.search).get('_id');
 
@@ -26,6 +43,16 @@ const getProduct = function () {
     })
     .catch((error) => {
       console.log(error);
+
+      if (error.message.includes('NetworkError')) {
+        showError('Errore di rete: Impossibile connettersi al server.');
+      } else if (error.message.includes('404')) {
+        showError('Errore: Risorsa non trovata.');
+      } else {
+        showError(
+          'Si è verificato un errore durante il caricamento dei prodotti.'
+        );
+      }
     });
 };
 

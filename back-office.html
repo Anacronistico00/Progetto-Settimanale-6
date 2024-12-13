@@ -27,6 +27,10 @@
       <nav><a href="index.html">Home</a></nav>
     </header>
     <main class="container mt-5 text-center h-100">
+      <div
+        id="alert-container"
+        class="position-fixed top-50 start-50 translate-middle-x w-50"
+      ></div>
       <h1 id="title" class="fw-bolder"></h1>
       <form id="productForm" class="container mt-3 d-flex flex-column">
         <fieldset class="container mt-3 d-flex flex-column">
@@ -82,7 +86,11 @@
             <div class="col-3"></div>
 
             <div class="col-3">
-              <button type="reset" class="w-100 bg-warning border-0">
+              <button
+                type="button"
+                class="w-100 bg-warning border-0"
+                id="btnReset"
+              >
                 Reset Form
               </button>
             </div>

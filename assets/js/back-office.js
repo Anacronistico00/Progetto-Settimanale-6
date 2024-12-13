@@ -5,6 +5,7 @@ const productImg = document.getElementById('productImg');
 const productPrice = document.getElementById('productPrice');
 const productDescription = document.getElementById('productDescription');
 const addItemBtn = document.getElementById('addItemBtn');
+const btnReset = document.getElementById('btnReset');
 const striveURL = 'https://striveschool-api.herokuapp.com/api/product/';
 const authKey =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzU4NzE4NzA3ZGI3MzAwMTU0MDYzYjQiLCJpYXQiOjE3MzM4NTAxMzksImV4cCI6MTczNTA1OTczOX0.NSvVZdTY9P_SYQYvjZZstE8IE_EdMLB_7V9wGYdUrXk';
@@ -25,6 +26,17 @@ class Product {
   }
 }
 
+btnReset.addEventListener('click', function (e) {
+  e.preventDefault;
+  if (confirm('Svuotare tutti i Campi?')) {
+    productName.value = '';
+    productBrand.value = '';
+    productImg.value = '';
+    productPrice.value = '';
+    productDescription.value = '';
+  }
+});
+
 addItemBtn.addEventListener('click', function (e) {
   e.preventDefault();
   const confirmationMessage = productID
@@ -43,6 +55,23 @@ addItemBtn.addEventListener('click', function (e) {
     }
   }
 });
+
+const showError = (message) => {
+  const alertContainer = document.getElementById('alert-container');
+
+  const errorAlert = document.createElement('div');
+  errorAlert.classList.add(
+    'alert',
+    'alert-danger',
+    'alert-dismissible',
+    'fade',
+    'show'
+  );
+  errorAlert.role = 'alert';
+  errorAlert.innerHTML = `${message} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`;
+
+  alertContainer.appendChild(errorAlert);
+};
 
 const addProduct = async (id) => {
   let newProduct = new Product(
@@ -70,6 +99,16 @@ const addProduct = async (id) => {
       console.log('Prodotto aggiunto:', data);
     } catch (error) {
       console.log("Errore durante l'invio del prodotto:", error);
+
+      if (error.message.includes('NetworkError')) {
+        showError('Errore di rete: Impossibile connettersi al server.');
+      } else if (error.message.includes('404')) {
+        showError('Errore: Risorsa non trovata.');
+      } else {
+        showError(
+          'Si è verificato un errore durante il caricamento dei prodotti.'
+        );
+      }
     }
 
     productForm.reset();
@@ -98,6 +137,16 @@ const getProduct = async (id) => {
     addInInput(productObj);
   } catch (error) {
     console.log(error);
+
+    if (error.message.includes('NetworkError')) {
+      showError('Errore di rete: Impossibile connettersi al server.');
+    } else if (error.message.includes('404')) {
+      showError('Errore: Risorsa non trovata.');
+    } else {
+      showError(
+        'Si è verificato un errore durante il caricamento dei prodotti.'
+      );
+    }
   }
 };
 
@@ -137,6 +186,16 @@ const modifyProduct = async (id) => {
     }
   } catch (error) {
     console.log(error);
+
+    if (error.message.includes('NetworkError')) {
+      showError('Errore di rete: Impossibile connettersi al server.');
+    } else if (error.message.includes('404')) {
+      showError('Errore: Risorsa non trovata.');
+    } else {
+      showError(
+        'Si è verificato un errore durante il caricamento dei prodotti.'
+      );
+    }
   }
 };
 
@@ -165,5 +224,15 @@ const deleteProduct = async (id) => {
     });
   } catch (error) {
     console.log(error);
+
+    if (error.message.includes('NetworkError')) {
+      showError('Errore di rete: Impossibile connettersi al server.');
+    } else if (error.message.includes('404')) {
+      showError('Errore: Risorsa non trovata.');
+    } else {
+      showError(
+        'Si è verificato un errore durante il caricamento dei prodotti.'
+      );
+    }
   }
 };

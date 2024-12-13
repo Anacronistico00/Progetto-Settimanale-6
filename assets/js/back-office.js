@@ -27,12 +27,20 @@ class Product {
 
 addItemBtn.addEventListener('click', function (e) {
   e.preventDefault();
-  if (!productID) {
-    addProduct();
-  } else {
-    modifyProduct(productID);
-    addItemBtn.innerText = 'Salva le Modifiche';
-    title.innerText = 'Modifica il prodotto selezionato';
+  const confirmationMessage = productID
+    ? 'Sei sicuro di voler salvare le modifiche?'
+    : 'Sei sicuro di voler aggiungere questo prodotto?';
+
+  if (confirm(confirmationMessage)) {
+    if (!productID) {
+      addProduct();
+      window.location.href = 'index.html';
+    } else {
+      modifyProduct(productID);
+      window.location.href = 'index.html';
+      addItemBtn.innerText = 'Salva le Modifiche';
+      title.innerText = 'Modifica il prodotto selezionato';
+    }
   }
 });
 
@@ -136,12 +144,15 @@ const btnRemoveProduct = document.getElementById('btnRemoveProduct');
 const btnRemove = document.createElement('button');
 btnRemove.textContent = 'Rimuovi Oggetto';
 btnRemoveProduct.appendChild(btnRemove);
-btnRemove.setAttribute('type', 'reset');
+btnRemove.setAttribute('type', 'button');
 btnRemove.classList.add('w-100', 'bg-danger', 'border-0');
 
 btnRemove.addEventListener('click', function (e) {
   e.preventDefault;
-  deleteProduct(productID);
+  if (confirm('Sei sicuro di voler rimuovere questo prodotto?')) {
+    deleteProduct(productID);
+    window.location.href = 'index.html';
+  }
 });
 
 const deleteProduct = async (id) => {

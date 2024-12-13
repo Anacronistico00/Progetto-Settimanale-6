@@ -7,8 +7,8 @@ const getProducts = async () => {
     let response = await fetch(striveURL, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${authKey}`, // Aggiungi il Bearer Token
-        'Content-Type': 'application/json', // Specifica che ci aspettiamo una risposta in JSON
+        Authorization: `Bearer ${authKey}`,
+        'Content-Type': 'application/json',
       },
     });
 
@@ -26,12 +26,12 @@ const getProducts = async () => {
                             <div class="card-body  d-flex flex-column justify-content-between">
                                 <h5 class="card-title">${product.brand} ${product.name}</h5>
                                 <p class="card-text">${product.description}</p>
-                                <div id="cardDivBtn" class="d-flex flex-column">
-                                </div>
-                                </div>
-                                </div>`;
-      // <a class="btn btn-primary mb-2">Dettagli</a>
-      // <a class="btn btn-danger">Modifica</a>
+                                <div  class="d-flex flex-column">
+                                <a href="details.html?_id=${product._id}" class="btn btn-primary mb-2">Dettagli</a>
+                                <a href="#" class="btn btn-danger">Modifica</a>
+                            </div>
+                            </div>
+                        </div>`;
     });
   } catch (error) {
     console.error('Errore durante il recupero dei prodotti:', error);

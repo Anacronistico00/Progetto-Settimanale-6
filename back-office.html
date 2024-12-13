@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🛍️ CRUDAZON</title>
+    <meta
+      name="description"
+      content="La tua piattaforma di e-commerce preferita!"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header
+      class="container-fluid bg-black d-flex justify-content-between align-items-center px-5 py-3"
+    >
+      <img
+        src="https://cdn.freebiesupply.com/images/large/2x/amazon-logo-white.png"
+        alt="Crudazone logo"
+      />
+      <nav><a href="index.html">Home</a></nav>
+    </header>
+    <main class="container mt-5 text-center h-100">
+      <h1 class="fw-bolder">Inserisci un nuovo prodotto</h1>
+      <form id="productForm" class="container mt-3 d-flex flex-column">
+        <fieldset class="container mt-3 d-flex flex-column">
+          <label for="productName" class="mt-3 fw-bold fs-4"
+            >NOME PRODOTTO</label
+          >
+          <input
+            type="text"
+            name="nameField"
+            id="productName"
+            placeholder="Inserisci nome prodotto"
+            required
+          />
+          <label for="productBrand" class="mt-3 fw-bold fs-4">BRAND</label>
+          <input
+            type="text"
+            name="brandField"
+            id="productBrand"
+            placeholder="Inserisci nome brand"
+            required
+          />
+          <label for="productImg" class="mt-3 fw-bold fs-4"
+            >IMMAGINE PRODOTTO</label
+          >
+          <input
+            type="text"
+            name="URLField"
+            id="productImg"
+            placeholder="Inserisci l'URL dell'immagine per il prodotto"
+            required
+          />
+          <label for="productPrice" class="mt-3 fw-bold fs-4">PREZZO</label>
+          <input
+            type="text"
+            name="priceField"
+            id="productPrice"
+            placeholder="Inserisci prezzo prodotto"
+            required
+          />
+          <label for="productDescription" class="mt-3 fw-bold fs-4"
+            >DESCRIZIONE PRODOTTO</label
+          >
+          <textarea
+            name="description"
+            id="productDescription"
+            rows="4"
+            cols="50"
+            placeholder="Inserisci descrizione prodotto...."
+            required
+          ></textarea>
+          <div class="container row mt-4">
+            <div class="col-3" id="btnRemoveProduct"></div>
+            <div class="col-3"></div>
+
+            <div class="col-3">
+              <button type="reset" class="w-100 bg-warning border-0">
+                Reset Form
+              </button>
+            </div>
+            <div class="col-3">
+              <button type="submit" class="w-100 bg-info border-0">
+                Inserisci Prodotto
+              </button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </main>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="assets/js/back-office.js"></script>
+  </body>
+</html>

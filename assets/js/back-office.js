@@ -14,7 +14,6 @@ title.innerText = 'Inserisci un nuovo prodotto';
 const productID = new URLSearchParams(window.location.search).get('_id');
 
 let productObj = {};
-let product;
 
 class Product {
   constructor(_name, _brand, _imageUrl, _price, _description) {
@@ -236,3 +235,54 @@ const deleteProduct = async (id) => {
     }
   }
 };
+
+const dropdown = document.getElementById('dropdown');
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+const updateDropdown = () => {
+  dropdown.innerHTML = '';
+  if (cart.length === 0) {
+    const emptyMessage = document.createElement('li');
+    emptyMessage.classList.add('dropdown-item', 'text-center');
+    emptyMessage.textContent = 'Il carrello è vuoto.';
+    dropdown.appendChild(emptyMessage);
+    return;
+  }
+
+  cart.forEach((item) => {
+    const listItem = document.createElement('li');
+
+    listItem.classList.add('dropdown-item', 'p-0');
+    listItem.innerHTML += `
+      <li class="d-flex align-items-center my-2">
+        <img src="${item.imageUrl}" alt="${item.name}" class="img-thumbnail me-3" style="width: 50px; height: 50px; object-fit: cover;">
+        <div>
+          <h6 class="mb-0">${item.name}</h6>
+          <small class="text-muted">${item.brand}</small>
+          <p class="mb-0 fw-bold">€${item.price}</p>
+          <button class="btn btn-danger btn-sm ms-3 remove-item">Rimuovi</button>
+        </div>
+      </li>
+    `;
+
+    dropdown.appendChild(listItem);
+  });
+
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+  const removeButtons = dropdown.querySelectorAll('.remove-item');
+  removeButtons.forEach((btn) => {
+    btn.addEventListener('click', function () {
+      const index = this.getAttribute('data-index');
+      removeFromCart(index);
+    });
+  });
+};
+
+const removeFromCart = (index) => {
+  cart.splice(index, 1);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateDropdown();
+};
+
+updateDropdown();

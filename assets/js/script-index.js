@@ -21,14 +21,17 @@ const getProducts = async () => {
 
     products.forEach((product) => {
       const main = document.getElementById('main');
-      main.innerHTML = `<div class="card" style="width: 18rem;">
+      main.innerHTML += `<div class="card m-2" style="width: 18rem;">
                             <img src="${product.imageUrl}" class="card-img-top" alt="${product.brand} ${product.name}">
-                            <div class="card-body">
+                            <div class="card-body  d-flex flex-column justify-content-between">
                                 <h5 class="card-title">${product.brand} ${product.name}</h5>
                                 <p class="card-text">${product.description}</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>`;
+                                <div id="cardDivBtn" class="d-flex flex-column">
+                                </div>
+                                </div>
+                                </div>`;
+      // <a class="btn btn-primary mb-2">Dettagli</a>
+      // <a class="btn btn-danger">Modifica</a>
     });
   } catch (error) {
     console.error('Errore durante il recupero dei prodotti:', error);

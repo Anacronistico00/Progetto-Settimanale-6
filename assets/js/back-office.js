@@ -12,8 +12,8 @@ const title = document.getElementById('title');
 title.innerText = 'Inserisci un nuovo prodotto';
 const productID = new URLSearchParams(window.location.search).get('_id');
 
+let productObj = {};
 let product;
-let productsList = [];
 
 class Product {
   constructor(_name, _brand, _imageUrl, _price, _description) {
@@ -27,11 +27,13 @@ class Product {
 
 addItemBtn.addEventListener('click', function (e) {
   e.preventDefault();
-  if (!product) {
+  if (!productID) {
     addProduct();
-  } else if (product) {
-    modifyProduct(product._id);
-  } else return;
+  } else {
+    modifyProduct(productID);
+    addItemBtn.innerText = 'Salva le Modifiche';
+    title.innerText = 'Modifica il prodotto selezionato';
+  }
 });
 
 const addProduct = async (id) => {
@@ -68,55 +70,63 @@ const addProduct = async (id) => {
   }
 };
 
-const getProduct = function (id) {
-  fetch(striveURL + productID, {
-    headers: {
-      Authorization: `Bearer ${authKey}`,
-    },
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Errore nel caricamento del prodotto');
-      }
-    })
-    .then((details) => {
-      console.log(details);
-      modifyProduct(details, productID);
-
-      productName.value = details.name;
-      productBrand.value = details.brand;
-      productImg.value = details.imageUrl;
-      productPrice.value = details.price;
-      productDescription.value = details.description;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
-const modifyProduct = async (details, id) => {
-  if (!details) {
-    console.error('Dettagli del prodotto non validi:', details);
-    return;
-  }
-
-  product.name = productName.value;
-  product.brand = productBrand.value;
-  product.imageUrl = productImg.value;
-  product.price = productPrice.value;
-  product.description = productDescription.value;
-
+const getProduct = async (id) => {
   try {
-    await fetch(striveURL + id, {
-      method: 'PUT',
-      body: JSON.stringify(product),
+    let response = await fetch(striveURL + id, {
+      method: 'GET',
       headers: {
-        Authorization: `bearer ${authKey}`,
-        'Content-Type': 'application/json; charset=utf-8',
+        Authorization: `Bearer ${authKey}`,
+        'Content-Type': 'application/json',
       },
     });
+
+    if (!response.ok) {
+      throw new Error('Errore nella risposta: ' + response.status);
+    }
+
+    let data = await response.json();
+    productObj = data;
+    console.log('Prodotto recuperato:', productObj);
+    addInInput(productObj);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+if (productID) {
+  getProduct(productID);
+  addItemBtn.innerText = 'Salva le Modifiche';
+  title.innerText = 'Modifica il prodotto selezionato';
+}
+
+function addInInput(object) {
+  productName.value = object.name;
+  productBrand.value = object.brand;
+  productImg.value = object.imageUrl;
+  productPrice.value = parseInt(object.price);
+  productDescription.value = object.description;
+}
+
+const modifyProduct = async (id) => {
+  const prodotto = new Product(
+    productName.value,
+    productBrand.value,
+    productImg.value,
+    parseInt(productPrice.value),
+    productDescription.value
+  );
+  try {
+    let response = await fetch(striveURL + id, {
+      method: 'PUT',
+      body: JSON.stringify(prodotto),
+      headers: {
+        Authorization: `Bearer ${authKey}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Errore nella risposta: ' + response.status);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -126,7 +136,7 @@ const btnRemoveProduct = document.getElementById('btnRemoveProduct');
 const btnRemove = document.createElement('button');
 btnRemove.textContent = 'Rimuovi Oggetto';
 btnRemoveProduct.appendChild(btnRemove);
-btnRemove.setAttribute('type', 'button');
+btnRemove.setAttribute('type', 'reset');
 btnRemove.classList.add('w-100', 'bg-danger', 'border-0');
 
 btnRemove.addEventListener('click', function (e) {
@@ -146,9 +156,3 @@ const deleteProduct = async (id) => {
     console.log(error);
   }
 };
-
-if (productID) {
-  getProduct();
-  addItemBtn.innerText = 'Salva le Modifiche';
-  title.innerText = 'Modifica il prodotto selezionato';
-}

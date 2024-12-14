@@ -101,6 +101,14 @@ const productDetails = function (details) {
     'mt-5'
   );
 
+  descriptionDiv.appendChild(descriptionH5);
+  descriptionDiv.appendChild(descriptionH2);
+  descriptionDiv.appendChild(descriptionPrice);
+  descriptionDiv.appendChild(descriptionDetails);
+  descriptionDiv.appendChild(toCartBtn);
+  mainDiv.appendChild(img);
+  mainDiv.appendChild(descriptionDiv);
+
   const dropdown = document.getElementById('dropdown');
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -165,7 +173,6 @@ const productDetails = function (details) {
     cart.push(details);
 
     itemNumber.innerText = 0;
-
     updateTotal(cart);
 
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -181,12 +188,4 @@ const productDetails = function (details) {
   }
 
   updateTotal(cart);
-
-  descriptionDiv.appendChild(descriptionH5);
-  descriptionDiv.appendChild(descriptionH2);
-  descriptionDiv.appendChild(descriptionPrice);
-  descriptionDiv.appendChild(descriptionDetails);
-  descriptionDiv.appendChild(toCartBtn);
-  mainDiv.appendChild(img);
-  mainDiv.appendChild(descriptionDiv);
 };

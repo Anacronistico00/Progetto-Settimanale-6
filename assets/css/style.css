@@ -15,3 +15,15 @@ header {
 header img {
   width: 10%;
 }
+
+.addToCart {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.addToCart:hover {
+  transform: scale(1.1);
+  background-color: #ffc107 !important;
+  color: black !important;
+}

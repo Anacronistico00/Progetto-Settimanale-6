@@ -58,6 +58,7 @@ const getProducts = async () => {
     products.forEach((product) => {
       main.innerHTML += `<div class="card m-2" style="width: 18rem;">
                             <img src="${product.imageUrl}" class="card-img-top" alt="${product.brand} ${product.name}">
+                            <button type='button' id="addToCart" class='btn bg-black text-white border-0 px-3 py-1 rounded-5 mt-5'>🛒</button>
                             <div class="card-body  d-flex flex-column justify-content-between">
                                 <h3 class="card-title fw-bolder">${product.brand} ${product.name}</h3>
                                 <p class="card-text">${product.description} </p>
@@ -90,49 +91,3 @@ const getProducts = async () => {
 };
 
 getProducts();
-
-const dropdown = document.getElementById('dropdown');
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-const updateDropdown = () => {
-  dropdown.innerHTML = '';
-  if (cart.length === 0) {
-    const emptyMessage = document.createElement('li');
-    emptyMessage.classList.add('dropdown-item', 'text-center');
-    emptyMessage.textContent = 'Il carrello è vuoto.';
-    dropdown.appendChild(emptyMessage);
-    return;
-  }
-
-  cart.forEach((item) => {
-    const listItem = document.createElement('li');
-    listItem.classList.add('dropdown-item');
-    listItem.innerHTML = `
-      <li class="d-flex align-items-center my-2">
-        <img src="${item.imageUrl}" alt="${item.name}" class="img-thumbnail me-3" style="width: 50px; height: 50px; object-fit: cover;">
-        <div>
-          <h6 class="mb-0">${item.name}</h6>
-          <small class="text-muted">${item.brand}</small>
-          <p class="mb-0 fw-bold">€${item.price}</p>
-          <button class="btn btn-danger btn-sm ms-3 remove-item">Rimuovi</button>
-        </div>
-      </li>
-    `;
-    dropdown.appendChild(listItem);
-  });
-  const removeButtons = dropdown.querySelectorAll('.remove-item');
-  removeButtons.forEach((btn) => {
-    btn.addEventListener('click', function () {
-      const index = this.getAttribute('data-index');
-      removeFromCart(index);
-    });
-  });
-};
-
-const removeFromCart = (index) => {
-  cart.splice(index, 1);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateDropdown();
-};
-
-updateDropdown();

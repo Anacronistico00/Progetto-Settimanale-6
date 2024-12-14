@@ -45,7 +45,6 @@ addItemBtn.addEventListener('click', function (e) {
   if (confirm(confirmationMessage)) {
     if (!productID) {
       addProduct();
-      window.location.href = 'index.html';
     } else {
       modifyProduct(productID);
       window.location.href = 'index.html';
@@ -72,7 +71,7 @@ const showError = (message) => {
   alertContainer.appendChild(errorAlert);
 };
 
-const addProduct = async (id) => {
+const addProduct = async () => {
   let newProduct = new Product(
     productName.value,
     productBrand.value,
@@ -80,39 +79,34 @@ const addProduct = async (id) => {
     productPrice.value,
     productDescription.value
   );
-  if (!id) {
-    try {
-      let response = await fetch(striveURL, {
-        method: 'POST',
-        headers: {
-          Authorization: `bearer ${authKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newProduct),
-      });
-      if (!response.ok) {
-        throw new Error('Errore nella risposta: ' + response.status);
-      }
-
-      const data = await response.json();
-      console.log('Prodotto aggiunto:', data);
-    } catch (error) {
-      console.log("Errore durante l'invio del prodotto:", error);
-
-      if (error.message.includes('NetworkError')) {
-        showError('Errore di rete: Impossibile connettersi al server.');
-      } else if (error.message.includes('404')) {
-        showError('Errore: Risorsa non trovata.');
-      } else {
-        showError(
-          'Si è verificato un errore durante il caricamento dei prodotti.'
-        );
-      }
+  try {
+    let response = await fetch(striveURL, {
+      method: 'POST',
+      headers: {
+        Authorization: `bearer ${authKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newProduct),
+    });
+    if (!response.ok) {
+      throw new Error('Errore nella risposta: ' + response.status);
+    } else {
+      productForm.reset();
     }
+    const data = await response.json();
+    console.log('Prodotto aggiunto:', data);
+  } catch (error) {
+    console.log("Errore durante l'invio del prodotto:", error);
 
-    productForm.reset();
-  } else {
-    printDetails(id);
+    if (error.message.includes('NetworkError')) {
+      showError('Errore di rete: Impossibile connettersi al server.');
+    } else if (error.message.includes('404')) {
+      showError('Errore: Risorsa non trovata.');
+    } else {
+      showError(
+        'Si è verificato un errore durante il caricamento dei prodotti.'
+      );
+    }
   }
 };
 
@@ -235,54 +229,3 @@ const deleteProduct = async (id) => {
     }
   }
 };
-
-const dropdown = document.getElementById('dropdown');
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-const updateDropdown = () => {
-  dropdown.innerHTML = '';
-  if (cart.length === 0) {
-    const emptyMessage = document.createElement('li');
-    emptyMessage.classList.add('dropdown-item', 'text-center');
-    emptyMessage.textContent = 'Il carrello è vuoto.';
-    dropdown.appendChild(emptyMessage);
-    return;
-  }
-
-  cart.forEach((item) => {
-    const listItem = document.createElement('li');
-
-    listItem.classList.add('dropdown-item', 'p-0');
-    listItem.innerHTML += `
-      <li class="d-flex align-items-center my-2">
-        <img src="${item.imageUrl}" alt="${item.name}" class="img-thumbnail me-3" style="width: 50px; height: 50px; object-fit: cover;">
-        <div>
-          <h6 class="mb-0">${item.name}</h6>
-          <small class="text-muted">${item.brand}</small>
-          <p class="mb-0 fw-bold">€${item.price}</p>
-          <button class="btn btn-danger btn-sm ms-3 remove-item">Rimuovi</button>
-        </div>
-      </li>
-    `;
-
-    dropdown.appendChild(listItem);
-  });
-
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
-
-  const removeButtons = dropdown.querySelectorAll('.remove-item');
-  removeButtons.forEach((btn) => {
-    btn.addEventListener('click', function () {
-      const index = this.getAttribute('data-index');
-      removeFromCart(index);
-    });
-  });
-};
-
-const removeFromCart = (index) => {
-  cart.splice(index, 1);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateDropdown();
-};
-
-updateDropdown();

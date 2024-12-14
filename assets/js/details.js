@@ -91,6 +91,7 @@ const productDetails = function (details) {
   toCartBtn.innerHTML = ' 🛒 Aggiungi al carrello 🛒';
   toCartBtn.id = 'addToCart';
   toCartBtn.classList.add(
+    'btn',
     'bg-black',
     'text-white',
     'border-0',
@@ -103,7 +104,7 @@ const productDetails = function (details) {
   const dropdown = document.getElementById('dropdown');
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  const updateDropdown = () => {
+  const updateCart = () => {
     dropdown.innerHTML = '';
     if (cart.length === 0) {
       const emptyMessage = document.createElement('li');
@@ -117,13 +118,13 @@ const productDetails = function (details) {
       const listItem = document.createElement('li');
       listItem.classList.add('dropdown-item');
       listItem.innerHTML = `
-      <li class="d-flex align-items-center my-2">
+      <li class="d-flex align-items-center my-1">
         <img src="${item.imageUrl}" alt="${item.name}" class="img-thumbnail me-3" style="width: 50px; height: 50px; object-fit: cover;">
         <div>
           <h6 class="mb-0">${item.name}</h6>
           <small class="text-muted">${item.brand}</small>
           <p class="mb-0 fw-bold">€${item.price}</p>
-          <button class="btn btn-danger btn-sm ms-3 remove-item">Rimuovi</button>
+          <button class="btn btn-danger btn-sm ms-3 remove-item">🗑️</button>
         </div>
       </li>
       `;
@@ -134,32 +135,52 @@ const productDetails = function (details) {
       btn.addEventListener('click', function () {
         const index = this.getAttribute('data-index');
         removeFromCart(index);
+        updateTotal(cart);
       });
     });
   };
 
   const removeFromCart = (index) => {
     cart.splice(index, 1);
+    if (cart.length === 0) {
+      itemNumber.innerText = 0;
+    } else {
+      updateTotal(cart);
+    }
     localStorage.setItem('cart', JSON.stringify(cart));
-    updateDropdown();
+    updateCart();
   };
 
-  updateDropdown();
+  updateCart();
 
   const addToCart = () => {
     cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     localStorage.setItem('cart', JSON.stringify(cart));
-    updateDropdown();
+    updateCart();
   };
 
   toCartBtn.addEventListener('click', function (e) {
     e.preventDefault();
     cart.push(details);
+
+    itemNumber.innerText = 0;
+
+    updateTotal(cart);
+
     localStorage.setItem('cart', JSON.stringify(cart));
     console.log('Prodotto aggiunto al carrello:', details);
     addToCart(details);
   });
+
+  function updateTotal(cart) {
+    let itemNumber = document.getElementById('itemNumber');
+    for (let i = 0; i < cart.length; i++) {
+      itemNumber.innerText = i + 1;
+    }
+  }
+
+  updateTotal(cart);
 
   descriptionDiv.appendChild(descriptionH5);
   descriptionDiv.appendChild(descriptionH2);

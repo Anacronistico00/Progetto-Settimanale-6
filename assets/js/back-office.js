@@ -38,19 +38,14 @@ btnReset.addEventListener('click', function (e) {
 
 addItemBtn.addEventListener('click', function (e) {
   e.preventDefault();
-  const confirmationMessage = productID
-    ? 'Sei sicuro di voler salvare le modifiche?'
-    : 'Sei sicuro di voler aggiungere questo prodotto?';
+  const confirmationMessage = 'Sei sicuro di voler salvare le modifiche?';
 
-  if (confirm(confirmationMessage)) {
-    if (!productID) {
-      addProduct();
-    } else {
-      modifyProduct(productID);
-      window.location.href = 'index.html';
-      addItemBtn.innerText = 'Salva le Modifiche';
-      title.innerText = 'Modifica il prodotto selezionato';
-    }
+  if (!productID) {
+    addProduct();
+  } else if (confirm(confirmationMessage)) {
+    addItemBtn.innerText = 'Salva le Modifiche';
+    title.innerText = 'Modifica il prodotto selezionato';
+    modifyProduct(productID);
   }
 });
 
@@ -176,6 +171,8 @@ const modifyProduct = async (id) => {
     });
     if (!response.ok) {
       throw new Error('Errore nella risposta: ' + response.status);
+    } else {
+      window.location.href = 'index.html';
     }
   } catch (error) {
     console.log(error);

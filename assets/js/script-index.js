@@ -100,6 +100,7 @@ getProducts();
 const productDetails = function (details) {
   const dropdown = document.getElementById('dropdown');
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  updateTotal(cart);
 
   const updateCart = () => {
     dropdown.innerHTML = '';
@@ -150,20 +151,12 @@ const productDetails = function (details) {
 
   updateCart();
 
-  const addToCart = () => {
-    cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCart();
-  };
-
   const toCartBtn = document.querySelectorAll('.addToCart');
   toCartBtn.forEach((btn) => {
     btn.addEventListener('click', async function (e) {
       e.preventDefault();
 
       const buttonID = e.target.id;
-      console.log(buttonID);
 
       try {
         const product = await getProduct(buttonID);
@@ -217,6 +210,4 @@ const productDetails = function (details) {
       itemNumber.innerText = i + 1;
     }
   }
-
-  updateTotal(cart);
 };
